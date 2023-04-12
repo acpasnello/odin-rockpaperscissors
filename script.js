@@ -1,3 +1,8 @@
+let buttons = document.querySelectorAll('.choice');
+let results = document.querySelector('.results');
+let playerScore = 0;
+let computerScore = 0;
+
 function playRound(playerSelection, computerSelection) {
     // Paper beats Rock, Rock beats Scissors, Scissors beat Paper
     playerSelection = playerSelection.toLowerCase();
@@ -8,25 +13,32 @@ function playRound(playerSelection, computerSelection) {
     }
     else if (playerSelection == "paper" && computerSelection == "rock") {
         result = "You win! Paper beats Rock"
+        playerScore++;
     }
     else if (playerSelection == "rock" && computerSelection == "scissors") {
-        result = "You win! Rock beats Scissors"
+        result = "You win! Rock beats Scissors";
+        playerScore++;
     }
     else if (playerSelection == "scissors" && computerSelection == "paper") {
-        result = "You win! Scissors beat Paper"
+        result = "You win! Scissors beat Paper";
+        playerScore++;
     }
     else if (computerSelection == "paper" && playerSelection == "rock") {
-        result = "You lose! Paper beats Rock"
+        result = "You lose! Paper beats Rock";
+        computerScore++;
     }
     else if (computerSelection == "rock" && playerSelection == "scissors") {
-        result = "You lose! Rock beats Scissors"
+        result = "You lose! Rock beats Scissors";
+        computerScore++;
     }
     else if (computerSelection == "scissors" && playerSelection == "paper") {
-        result = "You lose! Scissors beat Paper"
+        result = "You lose! Scissors beat Paper";
+        computerScore++;
     }
     else {
         result = "Undetermined!"
     }
+    displayResults(result)
     return result;
 }
 
@@ -59,8 +71,30 @@ function game() {
         }
     }
 }
+function initiateRound(e) {
+    console.log("Your slection: " + e.target.textContent)
+    playRound(e.target.textContent, getComputerChoice())
+}
 
-game()
-// const player = "rock";
-// const comp = getComputerChoice();
-// console.log(playRound(player, comp));
+function displayResults(result) {
+    let heading = document.createElement('h1');
+    heading.textContent = "Results:"
+    results.innerHTML = "";
+    results.appendChild(heading)
+    if (playerScore == 5) {
+        let winner = document.createElement('h2')
+        winner.textContent = "WINNER! You've won 5 rounds!"
+        results.append(winner)
+    } else if (computerScore == 5) {
+        let loser = document.createElement('h2')
+        loser.textContent = "LOSER! You let the computer win 5 rounds!"
+        results.append(loser)
+    }
+    let resultPhrase = document.createElement('p');
+    resultPhrase.textContent = result;
+    let scores = document.createElement("p");
+    scores.textContent = `Player: ${playerScore} Computer: ${computerScore}`;
+    results.append(resultPhrase, scores);
+}
+buttons.forEach(button => button.addEventListener('click', initiateRound))
+// playRound(e.target.textContent, getComputerChoice)))
